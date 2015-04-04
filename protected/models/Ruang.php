@@ -6,6 +6,9 @@
  * The followings are the available columns in table 'ruang':
  * @property integer $id_ruang
  * @property integer $no_ruang
+ *
+ * The followings are the available model relations:
+ * @property Jadwal[] $jadwals
  */
 class Ruang extends CActiveRecord
 {
@@ -41,6 +44,7 @@ class Ruang extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'jadwals' => array(self::HAS_MANY, 'Jadwal', 'id_ruang'),
 		);
 	}
 

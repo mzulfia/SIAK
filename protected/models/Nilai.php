@@ -11,6 +11,11 @@
  * @property double $bobot
  * @property integer $maksimum
  * @property double $nilai_po
+ *
+ * The followings are the available model relations:
+ * @property Dosen $idDosen
+ * @property MataKuliah $idMk
+ * @property Mahasiswa $idMhs
  */
 class Nilai extends CActiveRecord
 {
@@ -47,6 +52,9 @@ class Nilai extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idDosen' => array(self::BELONGS_TO, 'Dosen', 'id_dosen'),
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'idMhs' => array(self::BELONGS_TO, 'Mahasiswa', 'id_mhs'),
 		);
 	}
 

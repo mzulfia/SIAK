@@ -10,6 +10,10 @@
  * @property string $periode_akhir
  * @property integer $id_mk
  * @property integer $id_ruang
+ *
+ * The followings are the available model relations:
+ * @property MataKuliah $idMk
+ * @property Ruang $idRuang
  */
 class Jadwal extends CActiveRecord
 {
@@ -46,6 +50,8 @@ class Jadwal extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'idRuang' => array(self::BELONGS_TO, 'Ruang', 'id_ruang'),
 		);
 	}
 

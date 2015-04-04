@@ -13,6 +13,7 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -32,8 +33,14 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'password2'); ?>
+		<?php echo $form->passwordField($model,'password2',array('size'=>30,'maxlength'=>30)); ?>
+		<?php echo $form->error($model,'password2'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'id_role'); ?>
-		<?php echo $form->textField($model,'id_role'); ?>
+		<?php echo $form->dropDownList($model,'id_role', $model->getRoleOption(), array('empty' => '--Pilih Role)--')); ?>
 		<?php echo $form->error($model,'id_role'); ?>
 	</div>
 

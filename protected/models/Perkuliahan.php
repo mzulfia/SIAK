@@ -7,6 +7,10 @@
  * @property integer $id_perkuliahan
  * @property integer $id_mk
  * @property integer $id_mhs
+ *
+ * The followings are the available model relations:
+ * @property MataKuliah $idMk
+ * @property Mahasiswa $idMhs
  */
 class Perkuliahan extends CActiveRecord
 {
@@ -42,6 +46,8 @@ class Perkuliahan extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'idMhs' => array(self::BELONGS_TO, 'Mahasiswa', 'id_mhs'),
 		);
 	}
 

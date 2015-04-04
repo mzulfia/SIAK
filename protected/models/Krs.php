@@ -8,6 +8,10 @@
  * @property integer $id_mhs
  * @property integer $semester
  * @property integer $id_mk
+ *
+ * The followings are the available model relations:
+ * @property Mahasiswa $idMhs
+ * @property MataKuliah $idMk
  */
 class Krs extends CActiveRecord
 {
@@ -43,6 +47,8 @@ class Krs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMhs' => array(self::BELONGS_TO, 'Mahasiswa', 'id_mhs'),
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
 		);
 	}
 

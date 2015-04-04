@@ -8,9 +8,17 @@
  * @property string $username
  * @property string $password
  * @property integer $id_role
+ *
+ * The followings are the available model relations:
+ * @property Dosen[] $dosens
+ * @property Mahasiswa[] $mahasiswas
+ * @property Pegawai[] $pegawais
+ * @property Role $idRole
  */
 class User extends CActiveRecord
 {
+	public $password2;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -27,13 +35,13 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, id_role', 'required'),
+			array('username, password, id_role, password2', 'required', 'message'=>'tidak boleh kosong'),
 			array('id_role', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20),
-			array('password', 'length', 'max'=>30),
+			array('password, saltPassword', 'length', 'max'=>50),
 			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('id_user, username, password, id_role', 'safe', 'on'=>'search'),
+			// // @todo Please remove those attributes that should not be searched.
+			array('id_user, username, password, saltPassword, id_role', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -45,6 +53,10 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'dosens' => array(self::HAS_MANY, 'Dosen', 'id_user'),
+			'mahasiswas' => array(self::HAS_MANY, 'Mahasiswa', 'id_user'),
+			'pegawais' => array(self::HAS_MANY, 'Pegawai', 'id_user'),
+			'idRole' => array(self::BELONGS_TO, 'Role', 'id_role'),
 		);
 	}
 
@@ -57,7 +69,8 @@ class User extends CActiveRecord
 			'id_user' => 'Id User',
 			'username' => 'Username',
 			'password' => 'Password',
-			'id_role' => 'Id Role',
+			'password2' => 'Confirm Password',
+			'id_role' => 'Role',
 		);
 	}
 
@@ -87,6 +100,31 @@ class User extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	// Untuk ngambil role
+	public function getRoleOption(){
+		$roleArray = CHtml::listData(role::model()->findAll(), 'id_role','nama');
+		return $roleArray;
+	}
+
+	public function getRole($id_role){
+
+		$criteria = new CDbCriteria;
+		$criteria->condition='id_role=:id_role';
+		$criteria->params=array(':id_role'=>$id_role);
+		$role = role::model()->find($criteria);	
+		return $role->nama;
+	}
+
+	public function validatePassword($password){
+		return $this->hashPassword($password, $this->saltPassword)===$this->password;
+	}
+	public function hashPassword($password, $salt){
+		return md5($salt.$password);
+	}
+	public function generateSalt(){
+		return uniqid('',true);
 	}
 
 	/**

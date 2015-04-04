@@ -11,6 +11,14 @@
  * @property integer $semester
  * @property integer $kapasitas
  * @property integer $id_dosen
+ *
+ * The followings are the available model relations:
+ * @property Jadwal[] $jadwals
+ * @property Khs[] $khs
+ * @property Krs[] $krs
+ * @property Dosen $idDosen
+ * @property Nilai[] $nilais
+ * @property Perkuliahan[] $perkuliahans
  */
 class MataKuliah extends CActiveRecord
 {
@@ -47,6 +55,12 @@ class MataKuliah extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'jadwals' => array(self::HAS_MANY, 'Jadwal', 'id_mk'),
+			'khs' => array(self::HAS_MANY, 'Khs', 'id_mk'),
+			'krs' => array(self::HAS_MANY, 'Krs', 'id_mk'),
+			'idDosen' => array(self::BELONGS_TO, 'Dosen', 'id_dosen'),
+			'nilais' => array(self::HAS_MANY, 'Nilai', 'id_mk'),
+			'perkuliahans' => array(self::HAS_MANY, 'Perkuliahan', 'id_mk'),
 		);
 	}
 

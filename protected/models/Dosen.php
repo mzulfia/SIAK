@@ -8,6 +8,12 @@
  * @property integer $nip
  * @property string $nama
  * @property integer $id_user
+ *
+ * The followings are the available model relations:
+ * @property User $idUser
+ * @property Mahasiswa[] $mahasiswas
+ * @property MataKuliah[] $mataKuliahs
+ * @property Nilai[] $nilais
  */
 class Dosen extends CActiveRecord
 {
@@ -44,6 +50,10 @@ class Dosen extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idUser' => array(self::BELONGS_TO, 'User', 'id_user'),
+			'mahasiswas' => array(self::HAS_MANY, 'Mahasiswa', 'id_dosen'),
+			'mataKuliahs' => array(self::HAS_MANY, 'MataKuliah', 'id_dosen'),
+			'nilais' => array(self::HAS_MANY, 'Nilai', 'id_dosen'),
 		);
 	}
 

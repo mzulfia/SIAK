@@ -9,6 +9,9 @@
  * @property string $periode_awal
  * @property string $periode_akhir
  * @property integer $status
+ *
+ * The followings are the available model relations:
+ * @property Mahasiswa $idMhs
  */
 class Pembayaran extends CActiveRecord
 {
@@ -44,6 +47,7 @@ class Pembayaran extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMhs' => array(self::BELONGS_TO, 'Mahasiswa', 'id_mhs'),
 		);
 	}
 
