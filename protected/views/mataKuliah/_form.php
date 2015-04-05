@@ -50,9 +50,15 @@
 	</div>
 
 	<div class="row">
+<<<<<<< HEAD
 		<?php echo $form->labelEx($model,'nip_dosen'); ?>
 		<?php echo $form->textField($model,'nip_dosen'); ?>
 		<?php echo $form->error($model,'nip_dosen'); ?>
+=======
+		<?php echo $form->labelEx($model,'id_dosen'); ?>
+		<?php echo $form->textField($model,'id_dosen'); ?>
+		<?php echo $form->error($model,'id_dosen'); ?>
+>>>>>>> origin/master
 	</div>
 
 	<div class="row buttons">
