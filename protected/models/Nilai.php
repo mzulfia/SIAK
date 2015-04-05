@@ -4,13 +4,18 @@
  * This is the model class for table "nilai".
  *
  * The followings are the available columns in table 'nilai':
- * @property integer $id_mhs
- * @property integer $id_dosen
+ * @property integer $nim
+ * @property integer $nip_dosen
  * @property integer $id_mk
  * @property integer $komponen
  * @property double $bobot
  * @property integer $maksimum
  * @property double $nilai_po
+ *
+ * The followings are the available model relations:
+ * @property MataKuliah $idMk
+ * @property Dosen $nipDosen
+ * @property Mahasiswa $nim0
  */
 class Nilai extends CActiveRecord
 {
@@ -30,12 +35,12 @@ class Nilai extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_mhs, id_dosen, id_mk, komponen, bobot, maksimum, nilai_po', 'required'),
-			array('id_mhs, id_dosen, id_mk, komponen, maksimum', 'numerical', 'integerOnly'=>true),
+			array('nim, nip_dosen, id_mk, komponen, bobot, maksimum, nilai_po', 'required'),
+			array('nim, nip_dosen, id_mk, komponen, maksimum', 'numerical', 'integerOnly'=>true),
 			array('bobot, nilai_po', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_mhs, id_dosen, id_mk, komponen, bobot, maksimum, nilai_po', 'safe', 'on'=>'search'),
+			array('nim, nip_dosen, id_mk, komponen, bobot, maksimum, nilai_po', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,6 +52,9 @@ class Nilai extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'nipDosen' => array(self::BELONGS_TO, 'Dosen', 'nip_dosen'),
+			'nim0' => array(self::BELONGS_TO, 'Mahasiswa', 'nim'),
 		);
 	}
 
@@ -56,8 +64,8 @@ class Nilai extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_mhs' => 'Id Mhs',
-			'id_dosen' => 'Id Dosen',
+			'nim' => 'Nim',
+			'nip_dosen' => 'Nip Dosen',
 			'id_mk' => 'Id Mk',
 			'komponen' => 'Komponen',
 			'bobot' => 'Bobot',
@@ -84,8 +92,8 @@ class Nilai extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_mhs',$this->id_mhs);
-		$criteria->compare('id_dosen',$this->id_dosen);
+		$criteria->compare('nim',$this->nim);
+		$criteria->compare('nip_dosen',$this->nip_dosen);
 		$criteria->compare('id_mk',$this->id_mk);
 		$criteria->compare('komponen',$this->komponen);
 		$criteria->compare('bobot',$this->bobot);

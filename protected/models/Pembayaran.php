@@ -4,11 +4,14 @@
  * This is the model class for table "pembayaran".
  *
  * The followings are the available columns in table 'pembayaran':
- * @property integer $id_bayar
- * @property integer $id_mhs
+ * @property integer $id_pembayaran
+ * @property integer $nim
  * @property string $periode_awal
  * @property string $periode_akhir
  * @property integer $status
+ *
+ * The followings are the available model relations:
+ * @property Mahasiswa $nim0
  */
 class Pembayaran extends CActiveRecord
 {
@@ -28,11 +31,11 @@ class Pembayaran extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_mhs, periode_awal, periode_akhir, status', 'required'),
-			array('id_mhs, status', 'numerical', 'integerOnly'=>true),
+			array('nim, periode_awal, periode_akhir, status', 'required'),
+			array('nim, status', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_bayar, id_mhs, periode_awal, periode_akhir, status', 'safe', 'on'=>'search'),
+			array('id_pembayaran, nim, periode_awal, periode_akhir, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +47,7 @@ class Pembayaran extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'nim0' => array(self::BELONGS_TO, 'Mahasiswa', 'nim'),
 		);
 	}
 
@@ -53,8 +57,8 @@ class Pembayaran extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_bayar' => 'Id Bayar',
-			'id_mhs' => 'Id Mhs',
+			'id_pembayaran' => 'Id Pembayaran',
+			'nim' => 'Nim',
 			'periode_awal' => 'Periode Awal',
 			'periode_akhir' => 'Periode Akhir',
 			'status' => 'Status',
@@ -79,8 +83,8 @@ class Pembayaran extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_bayar',$this->id_bayar);
-		$criteria->compare('id_mhs',$this->id_mhs);
+		$criteria->compare('id_pembayaran',$this->id_pembayaran);
+		$criteria->compare('nim',$this->nim);
 		$criteria->compare('periode_awal',$this->periode_awal,true);
 		$criteria->compare('periode_akhir',$this->periode_akhir,true);
 		$criteria->compare('status',$this->status);

@@ -48,6 +48,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'id_user',
 		'username',
 		'password',
+		'saltPassword',
 		'id_role',
 		array(
 			'class'=>'CButtonColumn',

@@ -7,10 +7,20 @@
  * @property integer $id_user
  * @property string $username
  * @property string $password
+ * @property string $saltPassword
  * @property integer $id_role
+ *
+ * The followings are the available model relations:
+ * @property Admin[] $admins
+ * @property Dosen[] $dosens
+ * @property Mahasiswa[] $mahasiswas
+ * @property Sekretariat[] $sekretariats
+ * @property Role $idRole
  */
 class User extends CActiveRecord
 {
+	public $password2;
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -27,13 +37,13 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, id_role', 'required'),
+			array('username, password, password2, saltPassword, id_role', 'required'),
 			array('id_role', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20),
-			array('password', 'length', 'max'=>30),
+			array('password, saltPassword', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_user, username, password, id_role', 'safe', 'on'=>'search'),
+			array('id_user, username, password, saltPassword, id_role', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -45,6 +55,11 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'admins' => array(self::HAS_MANY, 'Admin', 'id_user'),
+			'dosens' => array(self::HAS_MANY, 'Dosen', 'id_user'),
+			'mahasiswas' => array(self::HAS_MANY, 'Mahasiswa', 'id_user'),
+			'sekretariats' => array(self::HAS_MANY, 'Sekretariat', 'id_user'),
+			'idRole' => array(self::BELONGS_TO, 'Role', 'id_role'),
 		);
 	}
 
@@ -57,6 +72,8 @@ class User extends CActiveRecord
 			'id_user' => 'Id User',
 			'username' => 'Username',
 			'password' => 'Password',
+			'password2' => 'Confirmation Password',
+			'saltPassword' => 'Salt Password',
 			'id_role' => 'Id Role',
 		);
 	}
@@ -82,6 +99,7 @@ class User extends CActiveRecord
 		$criteria->compare('id_user',$this->id_user);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
+		$criteria->compare('saltPassword',$this->saltPassword,true);
 		$criteria->compare('id_role',$this->id_role);
 
 		return new CActiveDataProvider($this, array(
@@ -89,6 +107,20 @@ class User extends CActiveRecord
 		));
 	}
 
+	public function getROleOption()
+	{
+		$roleArray = CHtml::listData(role::model()->findAll(), 'id_role','nama');
+		return $roleArray;
+	}
+
+	public function getRole($id_role)
+	{
+		$criteria = new CDbCriteria;
+		$criteria->conditions = 'id_role=:id_role';
+		$criteria->params=array(':id_role'=>$id_role);
+		$role = role::model()->find($criteria);
+		return $role->nama;
+	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
@@ -98,5 +130,17 @@ class User extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	public function validatePassword($password)
+	{
+		return $this->hashPassword($password, $this->saltPassword) === $this->password;
+	}
+	public function hashPassword($password,$salt)
+	{
+		return md5($salt.$password);
+	}
+	public function generateSalt()
+	{
+		return uniqid('', true);
 	}
 }

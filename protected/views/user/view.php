@@ -24,6 +24,7 @@ $this->menu=array(
 		'id_user',
 		'username',
 		'password',
+		'saltPassword',
 		'id_role',
 	),
 )); ?>

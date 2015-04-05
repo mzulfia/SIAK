@@ -6,7 +6,11 @@
  * The followings are the available columns in table 'perkuliahan':
  * @property integer $id_perkuliahan
  * @property integer $id_mk
- * @property integer $id_mhs
+ * @property integer $nim
+ *
+ * The followings are the available model relations:
+ * @property MataKuliah $idMk
+ * @property Mahasiswa $nim0
  */
 class Perkuliahan extends CActiveRecord
 {
@@ -26,11 +30,11 @@ class Perkuliahan extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_mk, id_mhs', 'required'),
-			array('id_mk, id_mhs', 'numerical', 'integerOnly'=>true),
+			array('id_mk, nim', 'required'),
+			array('id_mk, nim', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_perkuliahan, id_mk, id_mhs', 'safe', 'on'=>'search'),
+			array('id_perkuliahan, id_mk, nim', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -42,6 +46,8 @@ class Perkuliahan extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'nim0' => array(self::BELONGS_TO, 'Mahasiswa', 'nim'),
 		);
 	}
 
@@ -53,7 +59,7 @@ class Perkuliahan extends CActiveRecord
 		return array(
 			'id_perkuliahan' => 'Id Perkuliahan',
 			'id_mk' => 'Id Mk',
-			'id_mhs' => 'Id Mhs',
+			'nim' => 'Nim',
 		);
 	}
 
@@ -77,7 +83,7 @@ class Perkuliahan extends CActiveRecord
 
 		$criteria->compare('id_perkuliahan',$this->id_perkuliahan);
 		$criteria->compare('id_mk',$this->id_mk);
-		$criteria->compare('id_mhs',$this->id_mhs);
+		$criteria->compare('nim',$this->nim);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

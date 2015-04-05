@@ -5,10 +5,14 @@
  *
  * The followings are the available columns in table 'khs':
  * @property integer $id_khs
+ * @property integer $nim
+ * @property integer $id_mk
  * @property integer $semester
  * @property string $nilai_akhir
- * @property integer $id_mhs
- * @property integer $id_mk
+ *
+ * The followings are the available model relations:
+ * @property MataKuliah $idMk
+ * @property Mahasiswa $nim0
  */
 class Khs extends CActiveRecord
 {
@@ -28,12 +32,12 @@ class Khs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_khs, semester, nilai_akhir, id_mhs, id_mk', 'required'),
-			array('id_khs, semester, id_mhs, id_mk', 'numerical', 'integerOnly'=>true),
+			array('id_khs, nim, id_mk, semester, nilai_akhir', 'required'),
+			array('id_khs, nim, id_mk, semester', 'numerical', 'integerOnly'=>true),
 			array('nilai_akhir', 'length', 'max'=>2),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_khs, semester, nilai_akhir, id_mhs, id_mk', 'safe', 'on'=>'search'),
+			array('id_khs, nim, id_mk, semester, nilai_akhir', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -45,6 +49,8 @@ class Khs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'nim0' => array(self::BELONGS_TO, 'Mahasiswa', 'nim'),
 		);
 	}
 
@@ -55,10 +61,10 @@ class Khs extends CActiveRecord
 	{
 		return array(
 			'id_khs' => 'Id Khs',
+			'nim' => 'Nim',
+			'id_mk' => 'Id Mk',
 			'semester' => 'Semester',
 			'nilai_akhir' => 'Nilai Akhir',
-			'id_mhs' => 'Id Mhs',
-			'id_mk' => 'Id Mk',
 		);
 	}
 
@@ -81,10 +87,10 @@ class Khs extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_khs',$this->id_khs);
+		$criteria->compare('nim',$this->nim);
+		$criteria->compare('id_mk',$this->id_mk);
 		$criteria->compare('semester',$this->semester);
 		$criteria->compare('nilai_akhir',$this->nilai_akhir,true);
-		$criteria->compare('id_mhs',$this->id_mhs);
-		$criteria->compare('id_mk',$this->id_mk);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

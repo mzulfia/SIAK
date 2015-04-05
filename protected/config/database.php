@@ -7,6 +7,6 @@ return array(
 	'connectionString' => 'mysql:host=localhost;dbname=siakdb',
 	'emulatePrepare' => true,
 	'username' => 'root',
-	'password' => 'mzulfia',
+	'password' => '',
 	'charset' => 'utf8',
 );

@@ -22,6 +22,11 @@
 	</div>
 
 	<div class="row">
+		<?php echo $form->label($model,'saltPassword'); ?>
+		<?php echo $form->textField($model,'saltPassword',array('size'=>50,'maxlength'=>50)); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->label($model,'id_role'); ?>
 		<?php echo $form->textField($model,'id_role'); ?>
 	</div>

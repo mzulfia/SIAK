@@ -5,9 +5,13 @@
  *
  * The followings are the available columns in table 'krs':
  * @property integer $id_krs
- * @property integer $id_mhs
+ * @property integer $nim
  * @property integer $semester
  * @property integer $id_mk
+ *
+ * The followings are the available model relations:
+ * @property Mahasiswa $nim0
+ * @property MataKuliah $idMk
  */
 class Krs extends CActiveRecord
 {
@@ -27,11 +31,11 @@ class Krs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_mhs, semester, id_mk', 'required'),
-			array('id_mhs, semester, id_mk', 'numerical', 'integerOnly'=>true),
+			array('nim, semester, id_mk', 'required'),
+			array('nim, semester, id_mk', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_krs, id_mhs, semester, id_mk', 'safe', 'on'=>'search'),
+			array('id_krs, nim, semester, id_mk', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,6 +47,8 @@ class Krs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'nim0' => array(self::BELONGS_TO, 'Mahasiswa', 'nim'),
+			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
 		);
 	}
 
@@ -53,7 +59,7 @@ class Krs extends CActiveRecord
 	{
 		return array(
 			'id_krs' => 'Id Krs',
-			'id_mhs' => 'Id Mhs',
+			'nim' => 'Nim',
 			'semester' => 'Semester',
 			'id_mk' => 'Id Mk',
 		);
@@ -78,7 +84,7 @@ class Krs extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_krs',$this->id_krs);
-		$criteria->compare('id_mhs',$this->id_mhs);
+		$criteria->compare('nim',$this->nim);
 		$criteria->compare('semester',$this->semester);
 		$criteria->compare('id_mk',$this->id_mk);
 

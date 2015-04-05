@@ -6,6 +6,9 @@
  * The followings are the available columns in table 'role':
  * @property integer $id_role
  * @property string $nama
+ *
+ * The followings are the available model relations:
+ * @property User[] $users
  */
 class Role extends CActiveRecord
 {
@@ -41,6 +44,7 @@ class Role extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'users' => array(self::HAS_MANY, 'User', 'id_role'),
 		);
 	}
 

@@ -10,7 +10,15 @@
  * @property integer $sks
  * @property integer $semester
  * @property integer $kapasitas
- * @property integer $id_dosen
+ * @property integer $nip_dosen
+ *
+ * The followings are the available model relations:
+ * @property Jadwal[] $jadwals
+ * @property Khs[] $khs
+ * @property Krs[] $krs
+ * @property Dosen $nipDosen
+ * @property Nilai[] $nilais
+ * @property Perkuliahan[] $perkuliahans
  */
 class MataKuliah extends CActiveRecord
 {
@@ -30,12 +38,12 @@ class MataKuliah extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kode_mk, nama_mk, sks, semester, kapasitas, id_dosen', 'required'),
-			array('kode_mk, sks, semester, kapasitas, id_dosen', 'numerical', 'integerOnly'=>true),
+			array('kode_mk, nama_mk, sks, semester, kapasitas', 'required'),
+			array('sks, semester, kapasitas, nip_dosen', 'numerical', 'integerOnly'=>true),
 			array('nama_mk', 'length', 'max'=>25),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_mk, kode_mk, nama_mk, sks, semester, kapasitas, id_dosen', 'safe', 'on'=>'search'),
+			array('id_mk, kode_mk, nama_mk, sks, semester, kapasitas, nip_dosen', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,6 +55,12 @@ class MataKuliah extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'jadwals' => array(self::HAS_MANY, 'Jadwal', 'id_mk'),
+			'khs' => array(self::HAS_MANY, 'Khs', 'id_mk'),
+			'krs' => array(self::HAS_MANY, 'Krs', 'id_mk'),
+			'nipDosen' => array(self::BELONGS_TO, 'Dosen', 'nip_dosen'),
+			'nilais' => array(self::HAS_MANY, 'Nilai', 'id_mk'),
+			'perkuliahans' => array(self::HAS_MANY, 'Perkuliahan', 'id_mk'),
 		);
 	}
 
@@ -62,7 +76,7 @@ class MataKuliah extends CActiveRecord
 			'sks' => 'Sks',
 			'semester' => 'Semester',
 			'kapasitas' => 'Kapasitas',
-			'id_dosen' => 'Id Dosen',
+			'nip_dosen' => 'Nip Dosen',
 		);
 	}
 
@@ -90,7 +104,7 @@ class MataKuliah extends CActiveRecord
 		$criteria->compare('sks',$this->sks);
 		$criteria->compare('semester',$this->semester);
 		$criteria->compare('kapasitas',$this->kapasitas);
-		$criteria->compare('id_dosen',$this->id_dosen);
+		$criteria->compare('nip_dosen',$this->nip_dosen);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

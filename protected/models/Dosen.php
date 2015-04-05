@@ -4,10 +4,16 @@
  * This is the model class for table "dosen".
  *
  * The followings are the available columns in table 'dosen':
- * @property integer $id_dosen
- * @property integer $nip
+ * @property integer $nip_dosen
  * @property string $nama
+ * @property integer $status_pembimbing
  * @property integer $id_user
+ *
+ * The followings are the available model relations:
+ * @property User $idUser
+ * @property Mahasiswa[] $mahasiswas
+ * @property MataKuliah[] $mataKuliahs
+ * @property Nilai[] $nilais
  */
 class Dosen extends CActiveRecord
 {
@@ -27,12 +33,11 @@ class Dosen extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nip, nama, id_user', 'required'),
-			array('nip, id_user', 'numerical', 'integerOnly'=>true),
+			array('status_pembimbing, id_user', 'numerical', 'integerOnly'=>true),
 			array('nama', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_dosen, nip, nama, id_user', 'safe', 'on'=>'search'),
+			array('nip_dosen, nama, status_pembimbing, id_user', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +49,10 @@ class Dosen extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idUser' => array(self::BELONGS_TO, 'User', 'id_user'),
+			'mahasiswas' => array(self::HAS_MANY, 'Mahasiswa', 'nip_dosen'),
+			'mataKuliahs' => array(self::HAS_MANY, 'MataKuliah', 'nip_dosen'),
+			'nilais' => array(self::HAS_MANY, 'Nilai', 'nip_dosen'),
 		);
 	}
 
@@ -53,9 +62,9 @@ class Dosen extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_dosen' => 'Id Dosen',
-			'nip' => 'Nip',
+			'nip_dosen' => 'Nip Dosen',
 			'nama' => 'Nama',
+			'status_pembimbing' => 'Status Pembimbing',
 			'id_user' => 'Id User',
 		);
 	}
@@ -78,9 +87,9 @@ class Dosen extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_dosen',$this->id_dosen);
-		$criteria->compare('nip',$this->nip);
+		$criteria->compare('nip_dosen',$this->nip_dosen);
 		$criteria->compare('nama',$this->nama,true);
+		$criteria->compare('status_pembimbing',$this->status_pembimbing);
 		$criteria->compare('id_user',$this->id_user);
 
 		return new CActiveDataProvider($this, array(

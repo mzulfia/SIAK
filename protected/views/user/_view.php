@@ -17,6 +17,10 @@
 	<?php echo CHtml::encode($data->password); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('saltPassword')); ?>:</b>
+	<?php echo CHtml::encode($data->saltPassword); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('id_role')); ?>:</b>
 	<?php echo CHtml::encode($data->id_role); ?>
 	<br />

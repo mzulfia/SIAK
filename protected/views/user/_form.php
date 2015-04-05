@@ -27,13 +27,19 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'password'); ?>
-		<?php echo $form->passwordField($model,'password',array('size'=>30,'maxlength'=>30)); ?>
+		<?php echo $form->passwordField($model,'password',array('size'=>50,'maxlength'=>50)); ?>
 		<?php echo $form->error($model,'password'); ?>
 	</div>
 
 	<div class="row">
+		<?php echo $form->labelEx($model,'password2'); ?>
+		<?php echo $form->passwordField($model,'password2',array('size'=>50,'maxlength'=>50)); ?>
+		<?php echo $form->error($model,'password2'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'id_role'); ?>
-		<?php echo $form->textField($model,'id_role'); ?>
+		<?php echo $form->dropDownList($model,'id_role', $model->getRoleOption(), array('empty' => '-Pilih Role-')); ?>
 		<?php echo $form->error($model,'id_role'); ?>
 	</div>
 

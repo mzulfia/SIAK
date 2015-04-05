@@ -1,22 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "pegawai".
+ * This is the model class for table "sekretariat".
  *
- * The followings are the available columns in table 'pegawai':
- * @property integer $id_pegawai
- * @property integer $nip
+ * The followings are the available columns in table 'sekretariat':
+ * @property integer $nip_sekretariat
  * @property string $nama
  * @property integer $id_user
+ *
+ * The followings are the available model relations:
+ * @property User $idUser
  */
-class Pegawai extends CActiveRecord
+class Sekretariat extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'pegawai';
+		return 'sekretariat';
 	}
 
 	/**
@@ -27,12 +29,12 @@ class Pegawai extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nip, nama, id_user', 'required'),
-			array('nip, id_user', 'numerical', 'integerOnly'=>true),
+			array('nama, id_user', 'required'),
+			array('id_user', 'numerical', 'integerOnly'=>true),
 			array('nama', 'length', 'max'=>25),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_pegawai, nip, nama, id_user', 'safe', 'on'=>'search'),
+			array('nip_sekretariat, nama, id_user', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +46,7 @@ class Pegawai extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'idUser' => array(self::BELONGS_TO, 'User', 'id_user'),
 		);
 	}
 
@@ -53,8 +56,7 @@ class Pegawai extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_pegawai' => 'Id Pegawai',
-			'nip' => 'Nip',
+			'nip_sekretariat' => 'Nip Sekretariat',
 			'nama' => 'Nama',
 			'id_user' => 'Id User',
 		);
@@ -78,8 +80,7 @@ class Pegawai extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id_pegawai',$this->id_pegawai);
-		$criteria->compare('nip',$this->nip);
+		$criteria->compare('nip_sekretariat',$this->nip_sekretariat);
 		$criteria->compare('nama',$this->nama,true);
 		$criteria->compare('id_user',$this->id_user);
 
@@ -92,7 +93,7 @@ class Pegawai extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Pegawai the static model class
+	 * @return Sekretariat the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
