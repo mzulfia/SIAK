@@ -5,17 +5,8 @@
 
 <div class="view">
 
-<<<<<<< HEAD
 	<b><?php echo CHtml::encode($data->getAttributeLabel('nim')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->nim), array('view', 'id'=>$data->nim)); ?>
-=======
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id_mhs')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id_mhs), array('view', 'id'=>$data->id_mhs)); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('nim')); ?>:</b>
-	<?php echo CHtml::encode($data->nim); ?>
->>>>>>> origin/master
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('nama')); ?>:</b>
@@ -26,13 +17,8 @@
 	<?php echo CHtml::encode($data->id_user); ?>
 	<br />
 
-<<<<<<< HEAD
 	<b><?php echo CHtml::encode($data->getAttributeLabel('nip_dosen')); ?>:</b>
 	<?php echo CHtml::encode($data->nip_dosen); ?>
-=======
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id_dosen')); ?>:</b>
-	<?php echo CHtml::encode($data->id_dosen); ?>
->>>>>>> origin/master
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('jurusan')); ?>:</b>
@@ -43,22 +29,15 @@
 	<?php echo CHtml::encode($data->fakultas); ?>
 	<br />
 
-<<<<<<< HEAD
-=======
-	<?php /*
->>>>>>> origin/master
 	<b><?php echo CHtml::encode($data->getAttributeLabel('jenjang')); ?>:</b>
 	<?php echo CHtml::encode($data->jenjang); ?>
 	<br />
 
-<<<<<<< HEAD
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('status_akademis')); ?>:</b>
 	<?php echo CHtml::encode($data->status_akademis); ?>
 	<br />
 
-=======
->>>>>>> origin/master
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tanggal_lahir')); ?>:</b>
 	<?php echo CHtml::encode($data->tanggal_lahir); ?>
 	<br />

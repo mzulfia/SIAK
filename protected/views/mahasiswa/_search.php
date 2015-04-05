@@ -12,14 +12,6 @@
 )); ?>
 
 	<div class="row">
-<<<<<<< HEAD
-=======
-		<?php echo $form->label($model,'id_mhs'); ?>
-		<?php echo $form->textField($model,'id_mhs'); ?>
-	</div>
-
-	<div class="row">
->>>>>>> origin/master
 		<?php echo $form->label($model,'nim'); ?>
 		<?php echo $form->textField($model,'nim'); ?>
 	</div>
@@ -35,13 +27,8 @@
 	</div>
 
 	<div class="row">
-<<<<<<< HEAD
 		<?php echo $form->label($model,'nip_dosen'); ?>
 		<?php echo $form->textField($model,'nip_dosen'); ?>
-=======
-		<?php echo $form->label($model,'id_dosen'); ?>
-		<?php echo $form->textField($model,'id_dosen'); ?>
->>>>>>> origin/master
 	</div>
 
 	<div class="row">
@@ -60,14 +47,11 @@
 	</div>
 
 	<div class="row">
-<<<<<<< HEAD
 		<?php echo $form->label($model,'status_akademis'); ?>
 		<?php echo $form->textField($model,'status_akademis',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
 	<div class="row">
-=======
->>>>>>> origin/master
 		<?php echo $form->label($model,'tanggal_lahir'); ?>
 		<?php echo $form->textField($model,'tanggal_lahir'); ?>
 	</div>
