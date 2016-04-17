@@ -1,13 +1,16 @@
 <?php
 /* @var $this KhsController */
+/* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Khs',
+$this->menu=array(
+	array('label'=>'Create Khs', 'url'=>array('create')),
+	array('label'=>'Manage Khs', 'url'=>array('admin')),
 );
 ?>
-<h1><?php echo $this->id . '/' . $this->action->id; ?></h1>
 
-<p>
-	You may change the content of this page by modifying
-	the file <tt><?php echo __FILE__; ?></tt>.
-</p>
+<h2><strong>KHS</strong></h2>
+
+<?php $this->widget('zii.widgets.CListView', array(
+	'dataProvider'=>$dataProvider,
+	'itemView'=>'_view',
+)); ?>

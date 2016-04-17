@@ -1,0 +1,11 @@
+class DbConnection extends CDbConnection
+{
+    public function open()
+    {
+        try {
+            parent::open();
+        } catch(CDbException $e) {
+            Yii::app()->request->redirect(array('site/login'));
+        }
+    }
+}

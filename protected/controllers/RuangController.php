@@ -32,7 +32,7 @@ class RuangController extends Controller
         }
         else if( Yii::app()->user->getState('role') == "2")
         {
-            $arr =array('admin', 'create', 'update','view', 'index'); 
+            $arr =array('admin', 'create', 'update','delete','view', 'index'); 
         }
         else if( Yii::app()->user->getState('role') == "3")
         {
@@ -80,7 +80,14 @@ class RuangController extends Controller
 		{
 			$model->attributes=$_POST['Ruang'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_ruang));
+			{
+				Yii::app()->user->setFlash('success', "Berhasil dibuat!");	
+				$this->redirect(array('admin'));
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal dibuat!");
+			}
 		}
 
 		$this->render('create',array(
@@ -104,7 +111,14 @@ class RuangController extends Controller
 		{
 			$model->attributes=$_POST['Ruang'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_ruang));
+			{
+				Yii::app()->user->setFlash('success', "Berhasil disimpan!");	
+				$this->redirect(array('admin'));
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+			}
 		}
 
 		$this->render('update',array(

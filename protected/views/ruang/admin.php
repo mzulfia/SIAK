@@ -1,54 +1,90 @@
 <?php
 /* @var $this RuangController */
 /* @var $model Ruang */
-
-$this->breadcrumbs=array(
-	'Ruangs'=>array('index'),
-	'Manage',
+Yii::app()->clientScript->registerScript(
+   'myHideEffect',
+   '$(".alert-success").animate({opacity: 1.0}, 3000).fadeOut("slow");',
+   CClientScript::POS_READY
 );
 
-$this->menu=array(
-	array('label'=>'List Ruang', 'url'=>array('index')),
-	array('label'=>'Create Ruang', 'url'=>array('create')),
-);
-
-Yii::app()->clientScript->registerScript('search', "
-$('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
-});
-$('.search-form form').submit(function(){
-	$('#ruang-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
-});
-");
 ?>
+<script type="text/javascript">
+    $("#success").hide();
+</script>
 
-<h1>Manage Ruangs</h1>
+<?php $url = Yii::app()->request->baseUrl; ?>
+<div class="container tab-kalender">
+        <div class="row clearfix">
+          <div class="col-md-12 column">
+            <div class="tabbable" id="tabs-59303">
+              <ul class="nav nav-tabs">
+                <li>
+                  <a href="<?php echo $url ?>/Kalender/admin">Kalender</a>
+                </li>
+                <li>
+                  <a href="<?php echo $url ?>/MataKuliah/admin">Mata Kuliah</a>
+                </li>
+                <li>
+                  <a href="<?php echo $url ?>/Jadwal/admin">Jadwal</a>
+                </li>
+                <li class="active">
+                  <a href="<?php echo $url ?>/Ruang/admin">Ruangan</a>
+                </li>
+                <li>
+                  <a href="<?php echo $url ?>/PesertaMK/viewListMKSBA">Perkuliahan</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
+<h2><strong>Kelola Ruangan</strong></h2>
+<?php 
+  if(Yii::app()->user->hasFlash('success')):?>
+    <div class="alert-success">
+        <?php echo "<h4 style= 'color: #00923f'>" . Yii::app()->user->getFlash('success') . "</h4>"; ?>
+    </div>
+<?php endif; ?>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
-<div class="search-form" style="display:none">
-<?php $this->renderPartial('_search',array(
-	'model'=>$model,
-)); ?>
-</div><!-- search-form -->
+<div class="alert-success" id='success'>
+          <?php echo "<h4 style= 'color: #00923f'> Berhasil dihapus! </h4>"; ?>
+</div>
+<script type="text/javascript">
+    $("#success").hide();
+</script>
+
+<hr>
+
+
+<div class="left buat">
+	<a class="btn btn-default green" href="<?php echo $url ?>/ruang/create" role="button">Buat Ruangan Baru</a>
+</div>
+
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'ruang-grid',
 	'dataProvider'=>$model->search(),
-	'filter'=>$model,
 	'columns'=>array(
-		'id_ruang',
-		'no_ruang',
+		array(
+            'header'=>'No.',
+            'value'=>'$this->grid->dataProvider->pagination->currentPage * $this->grid->dataProvider->pagination->pageSize + ($row+1)',
+            'htmlOptions'=>array('width'=>'25px'),
+        ),
+        array(
+        	'header' => 'No Ruangan',
+        	'value'=>'$data->no_ruang',
+        ),
 		array(
 			'class'=>'CButtonColumn',
+			'htmlOptions'=>array('width'=>'75px'),
+			'afterDelete'=>'function(link,success,data){ 
+				if(success){  
+					$("html, body").animate({ scrollTop: 0 }, 0);
+    				document.getElementById("success").style.display = "block";
+   					$(".alert-success").animate({opacity: 1.0}, 3000).fadeOut("slow"); 
+   				}
+   			};',
 		),
 	),
 )); ?>

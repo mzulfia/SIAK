@@ -26,23 +26,32 @@ class MataKuliahController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('*'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+		if( Yii::app()->user->getState('role') == "1")
+        {
+             $arr =array('admin', 'create','update', 'view', 'delete', 'index');
+        }
+        else if( Yii::app()->user->getState('role') == "2")
+        {
+            $arr =array('admin','create', 'update', 'view', 'delete', 'index'); 
+        }
+        else if( Yii::app()->user->getState('role') == "3")
+        {
+          	$arr = array('');      
+        }
+        else
+        {
+        	$arr = array('');
+        }        
+        return array(                   
+                array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                'actions'=>$arr,
+                                'users'=>array('@'),
+                        ),
+                                                
+                        array('deny',  // deny all users
+                                'users'=>array('*'),
+                        ),
+                );
 	}
 
 	/**
@@ -71,7 +80,14 @@ class MataKuliahController extends Controller
 		{
 			$model->attributes=$_POST['MataKuliah'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_mk));
+			{
+				Yii::app()->user->setFlash('success', "Berhasil dibuat!");	
+				$this->redirect(array('admin'));
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal dibuat!");
+			}
 		}
 
 		$this->render('create',array(
@@ -95,7 +111,14 @@ class MataKuliahController extends Controller
 		{
 			$model->attributes=$_POST['MataKuliah'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_mk));
+			{
+				Yii::app()->user->setFlash('success', "Berhasil disimpan!");	
+				$this->redirect(array('admin'));
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+			}	
 		}
 
 		$this->render('update',array(

@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Web Application',
+	'name'=>'Sistem Informasi Akademik',
 
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -16,6 +16,14 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.modules.Admin.models.*',
+		'application.modules.Admin.components.*',
+		'application.modules.Sekretariat.models.*',
+		'application.modules.Sekretariat.components.*',
+		'application.modules.Dosen.models.*',
+		'application.modules.Dosen.components.*',
+		'application.modules.Mahasiswa.models.*',
+		'application.modules.Mahasiswa.components.*'
 	),
 
 	'modules'=>array(
@@ -26,22 +34,58 @@ return array(
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
 		),
+		'Admin',
+		'Sekretariat',
+		'Mahasiswa',
+		'Dosen',
 	),
 
 	// application components
 	'components'=>array(
-
+		'db' => array(
+			'class' => 'DbComponent'),		
+		'widgetFactory' => array(
+            'widgets' => array(
+                'CLinkPager' => array(
+                    'htmlOptions' => array(
+                        'class' => 'pagination'
+                    ),
+                    'header' => false,
+                    'maxButtonCount' => 5,
+                    'cssFile' => false,
+                ),
+                'CGridView' => array(
+                    'htmlOptions' => array(
+                        'class' => 'table'
+                    ),
+                    'pagerCssClass' => 'dataTables_paginate paging_bootstrap',
+                    'itemsCssClass' => 'table table-striped table-bordered table-hover',
+                    'cssFile' => false,
+                    'summaryCssClass' => 'summary left',
+    		    'summaryText' => '',
+                    //'summaryText' => 'Menampilkan {start} - {end} dari {count} hasil',
+                ),
+                'CDetailView'=> array(
+                	'htmlOptions' => array(
+                        'class' => 'table table-hover detail left'
+                    ),
+                    'cssFile' => false,
+                ),
+            ),
+        ),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+			'class' => 'WebUser',
 		),
 
 		// uncomment the following to enable URLs in path-format
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+			'showScriptName'=>false,
 			'rules'=>array(
-				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
-				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				'<controller:\w+>/<id:\d+>/*'=>'<controller>/view',
+				'<controller:\w+>/<action:\w+>/<id:\d+>/*'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
 			),
 		),
@@ -69,9 +113,48 @@ return array(
 				*/
 			),
 		),
-
+		'ePdf' => array(
+	        'class'         => 'ext.yii-pdf.EYiiPdf',
+	        'params'        => array(
+	            'mpdf'     => array(
+	                'librarySourcePath' => 'application.vendors.mpdf.*',
+	                'constants'         => array(
+	                    '_MPDF_TEMP_PATH' => Yii::getPathOfAlias('application.runtime'),
+	                ),
+	                'class'=>'mpdf', // the literal class filename to be loaded from the vendors folder
+	                'defaultParams'     => array( // More info: http://mpdf1.com/manual/index.php?tid=184
+	                    'mode'              => '', //  This parameter specifies the mode of the new document.
+	                    'format'            => 'A4', // format A4, A5, ...
+	                    'default_font_size' => 0, // Sets the default document font size in points (pt)
+	                    'default_font'      => '', // Sets the default font-family for the new document.
+	                    'mgl'               => 15, // margin_left. Sets the page margins for the new document.
+	                    'mgr'               => 15, // margin_right
+	                    'mgt'               => 16, // margin_top
+	                    'mgb'               => 16, // margin_bottom
+	                    'mgh'               => 9, // margin_header
+	                    'mgf'               => 9, // margin_footer
+	                    'orientation'       => 'L', // landscape or portrait orientation
+	                )
+	            ),
+	            'HTML2PDF' => array(
+	                'librarySourcePath' => 'application.vendors.html2pdf.*',
+	                'classFile'         => 'html2pdf.class.php', // For adding to Yii::$classMap
+	                /*'defaultParams'     => array( // More info: http://wiki.spipu.net/doku.php?id=html2pdf:en:v4:accueil
+	                    'orientation' => 'P', // landscape or portrait orientation
+	                    'format'      => 'A4', // format A4, A5, ...
+	                    'language'    => 'en', // language: fr, en, it ...
+	                    'unicode'     => true, // TRUE means clustering the input text IS unicode (default = true)
+	                    'encoding'    => 'UTF-8', // charset encoding; Default is UTF-8
+	                    'marges'      => array(5, 5, 5, 8), // margins by default, in order (left, top, right, bottom)
+	                )*/
+		        )
+		    ),
+	    ),
+		'format'=>array(
+        	'class'=>'application.components.Formatter',
+        	'numberFormat'=>array('decimals'=>2, 'decimalSeparator'=>'.', 'thousandSeparator'=>','),
+        ),	
 	),
-
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(

@@ -15,9 +15,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<?php echo $form->errorSummary($model); ?>
+	<p class="note">Kolom dengan <span class="required">*</span> harus diisi.</p>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'nama'); ?>

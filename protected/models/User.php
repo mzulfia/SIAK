@@ -19,7 +19,8 @@
  */
 class User extends CActiveRecord
 {
-	public $password2;
+	public $password_temp;
+	public $confirmation_password;
 
 	/**
 	 * @return string the associated database table name
@@ -37,7 +38,14 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, password2, saltPassword, id_role', 'required'),
+			array('username, password, confirmation_password, id_role', 'required', 'message' => '{attribute} tidak boleh kosong'),
+			array('username', 'unique', 'className' => 'User',
+				'attributeName' => 'username',
+				'message' => 'Username sudah digunakan'),
+			array('password', 'length', 'min'=>6, 'max'=>50),
+			array('password', 'match', 'pattern'=>'/[a-zA-Z]/', 'message'=>'Password harus terdiri dari minimal 1 huruf'),
+			array('password', 'match', 'pattern'=>'/\d/', 'message'=>'Password harus terdiri dari minimal 1 angka'),
+			array('confirmation_password', 'compare', 'compareAttribute' => 'password_temp', 'message' => 'Password dan Confirmation Password tidak sama' ),
 			array('id_role', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>20),
 			array('password, saltPassword', 'length', 'max'=>50),
@@ -72,9 +80,9 @@ class User extends CActiveRecord
 			'id_user' => 'Id User',
 			'username' => 'Username',
 			'password' => 'Password',
-			'password2' => 'Confirmation Password',
+			'confirmation_password' => 'Confirmation Password',
 			'saltPassword' => 'Salt Password',
-			'id_role' => 'Id Role',
+			'id_role' => 'Role',
 		);
 	}
 
@@ -107,20 +115,12 @@ class User extends CActiveRecord
 		));
 	}
 
-	public function getROleOption()
+	public function getRoleOption()
 	{
-		$roleArray = CHtml::listData(role::model()->findAll(), 'id_role','nama');
+		$roleArray = CHtml::listData(Role::model()->findAll(), 'id_role','nama');
 		return $roleArray;
 	}
 
-	public function getRole($id_role)
-	{
-		$criteria = new CDbCriteria;
-		$criteria->conditions = 'id_role=:id_role';
-		$criteria->params=array(':id_role'=>$id_role);
-		$role = role::model()->find($criteria);
-		return $role->nama;
-	}
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!

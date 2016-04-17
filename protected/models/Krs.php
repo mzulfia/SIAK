@@ -5,13 +5,13 @@
  *
  * The followings are the available columns in table 'krs':
  * @property integer $id_krs
- * @property integer $nim
+ * @property integer $id_mhs
+ * @property integer $id_jadwal
  * @property integer $semester
- * @property integer $id_mk
  *
  * The followings are the available model relations:
- * @property Mahasiswa $nim0
- * @property MataKuliah $idMk
+ * @property Mahasiswa $idMhs
+ * @property Jadwal $idJadwal
  */
 class Krs extends CActiveRecord
 {
@@ -31,11 +31,11 @@ class Krs extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nim, semester, id_mk', 'required'),
-			array('nim, semester, id_mk', 'numerical', 'integerOnly'=>true),
+			array('semester', 'required', 'message' => '{attribute} tidak boleh kosong'),
+			array('id_mhs, id_jadwal, semester', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_krs, nim, semester, id_mk', 'safe', 'on'=>'search'),
+			array('id_krs, id_mhs, id_jadwal, semester', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,8 +47,8 @@ class Krs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'nim0' => array(self::BELONGS_TO, 'Mahasiswa', 'nim'),
-			'idMk' => array(self::BELONGS_TO, 'MataKuliah', 'id_mk'),
+			'idMhs' => array(self::BELONGS_TO, 'Mahasiswa', 'id_mhs'),
+			'idJadwal' => array(self::BELONGS_TO, 'Jadwal', 'id_jadwal'),
 		);
 	}
 
@@ -59,9 +59,11 @@ class Krs extends CActiveRecord
 	{
 		return array(
 			'id_krs' => 'Id Krs',
-			'nim' => 'Nim',
+			'id_mhs' => 'Id Mhs',
+			'id_jadwal' => 'Id Jadwal',
 			'semester' => 'Semester',
-			'id_mk' => 'Id Mk',
+			'tahun_ajaran' => 'Tahun Ajaran',
+			'term' => 'Term',
 		);
 	}
 
@@ -77,16 +79,23 @@ class Krs extends CActiveRecord
 	 * @return CActiveDataProvider the data provider that can return the models
 	 * based on the search/filter conditions.
 	 */
+
 	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
+		$criteria->select = array('id_krs', 'id_mhs', 'semester', 'id_jadwal');
+		$criteria->condition ='id_mhs =:id';
+		$criteria->params = array(':id' => (int) Mahasiswa::getId(Yii::app()->user->getId())); 
+
 		$criteria->compare('id_krs',$this->id_krs);
-		$criteria->compare('nim',$this->nim);
+		$criteria->compare('id_mhs',$this->id_mhs);
 		$criteria->compare('semester',$this->semester);
-		$criteria->compare('id_mk',$this->id_mk);
+		$criteria->compare('id_jadwal',$this->id_jadwal);
+		$criteria->compare('tahun_ajaran',$this->tahun_ajaran);
+		$criteria->compare('term',$this->term);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -102,5 +111,26 @@ class Krs extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getKRS($id, $semester)
+	{
+		$sql = 'SELECT * from krs WHERE id_mhs = :id_mhs AND semester = :semester';
+		$result = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id_mhs' => $id, ':semester' => $semester));
+		return empty($result);
+	}
+
+	public function getSms($id)
+	{
+		$sql = 'SELECT semester FROM krs WHERE id_mhs = :id_mhs ORDER BY semester DESC LIMIT 1';
+		$result = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id_mhs' => $id));
+		$ret = '';
+
+		foreach($result as $arr)
+		{
+			$ret = $arr['semester'];
+		}
+
+		return empty($ret) ? 1 : $ret;
 	}
 }

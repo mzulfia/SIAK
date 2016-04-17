@@ -5,10 +5,12 @@
  *
  * The followings are the available columns in table 'ruang':
  * @property integer $id_ruang
- * @property integer $no_ruang
+ * @property string $no_ruang
  *
  * The followings are the available model relations:
  * @property Jadwal[] $jadwals
+ * @property Jadwal[] $jadwals1
+ * @property Jadwal[] $jadwals2
  */
 class Ruang extends CActiveRecord
 {
@@ -28,8 +30,8 @@ class Ruang extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('no_ruang', 'required'),
-			array('no_ruang', 'numerical', 'integerOnly'=>true),
+			array('no_ruang', 'required', 'message' => '{attribute} tidak boleh kosong'),
+			array('no_ruang', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id_ruang, no_ruang', 'safe', 'on'=>'search'),
@@ -44,7 +46,10 @@ class Ruang extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'jadwals' => array(self::HAS_MANY, 'Jadwal', 'id_ruang'),
+			'jadwals1' => array(self::HAS_MANY, 'Jadwal', 'id_ruang_1'),
+			'jadwals2' => array(self::HAS_MANY, 'Jadwal', 'id_ruang_2'),
+			'jadwals3' => array(self::HAS_MANY, 'Jadwal', 'id_ruang_3'),
+			'jadwals4' => array(self::HAS_MANY, 'Jadwal', 'id_ruang_4'),
 		);
 	}
 
@@ -54,7 +59,7 @@ class Ruang extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_ruang' => 'Id Ruang',
+			'id_ruang' => 'ID Ruang',
 			'no_ruang' => 'No Ruang',
 		);
 	}
@@ -94,5 +99,11 @@ class Ruang extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getRuangOption()
+	{
+		$ruangArray = CHtml::listData(Ruang::model()->findAll(), 'id_ruang','no_ruang');
+		return $ruangArray;
 	}
 }

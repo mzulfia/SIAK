@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create Role</h1>
+<h2><strong>Buat Role</strong></h2>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

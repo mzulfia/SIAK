@@ -1,0 +1,226 @@
+/* 
+    Document   : c10.css
+    Author     : C10
+    Description:
+        Purpose of the stylesheet follows.
+        */
+
+/* @import url('/css/bootstrap.min.css'); */
+
+.col-md-3 {
+    width: 25%;
+}
+.col-md-4 {
+    width: 33.3333%;
+}
+.col-md-5 {
+    width: 41.6667%;
+}
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+    float: left;
+}
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857;
+    vertical-align: top;
+    border-top: 1px solid #DDD;
+}
+.table>thead>tr>td.success,.table>tbody>tr>td.success,.table>tfoot>tr>td.success,.table>thead>tr>th.success,.table>tbody>tr>th.success,.table>tfoot>tr>th.success,.table>thead>tr.success>td,.table>tbody>tr.success>td,.table>tfoot>tr.success>td,.table>thead>tr.success>th,.table>tbody>tr.success>th,.table>tfoot>tr.success>th{background-color:#dff0d8}
+/*--------------------------------------------------*/
+
+tr.success {
+    background-color:#dff0d8;
+}
+.row {
+    width: 100%;
+    display: inline;
+}
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 1170px;
+    text-align: center;
+}
+#header {
+    margin: 10px;
+}
+#logo {
+    background-color:#eeeeee;
+    padding-top:5px;
+    position: relative;
+}
+#kop {
+    background-color:#eeeeff;
+    padding:2px;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    left: 320px;
+}
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    
+}
+#krs table.data {
+    width: 20%;
+    border: none;
+    padding: 4px;
+    text-align: left;
+}
+
+#krs tbody.data {
+    border: none;
+    padding: 4px;
+    text-align: left;
+}
+
+#krs tr.data {
+    border: none;
+    padding: 4px;
+    text-align: left;
+}
+
+#krs td.data {
+    border: none;
+    padding: 4px;
+    text-align: left;
+}
+
+#krs table.nilai {
+    border-collapse: collapse;
+    text-align: center;
+}
+#krs th.nilai {
+    border: 1px solid #000;
+    text-align: center;
+}
+#krs tbody.nilai {
+    border: 1px solid #000;
+    text-align: center;
+}
+#krs tfoot.nilai {
+    border: 1px solid #000;
+    text-align: center;
+}
+#krs td.nilai {
+    border: 1px solid #000;
+    text-align: center;
+}
+#krs tr.nilai {
+    border: 1px solid #000;
+    text-align: center;
+}
+#krs td.nilai {
+    border: 1px solid #000;
+    text-align: center;
+}
+
+#krs table.font12 {
+    width: 25%;
+    font-size: 12px;
+    text-align:center;
+}
+#krs thead.font12 {
+    font-size: 12px;
+    text-align:center;
+}
+#krs tbody.font12 {
+   font-size: 12px;
+    text-align:center;
+}
+#krs tfoot.font12 {
+    font-size: 12px;
+    text-align:center;
+}
+#krs td.font12 {
+    font-size: 12px;
+    text-align:center;
+}
+#krs tr.font12 {
+    font-size: 12px;
+    text-align:center;
+}
+#krs td.font12 {
+    font-size: 12px;
+    text-align:center;
+}
+#krs .container{
+    width: 100%;
+}
+
+#krs .col-md-3{
+    width: 25%;
+}
+
+#krs .col-md-4{
+    width: 50%;
+    float: right;
+}
+
+#krs .row{
+    margin-right:auto;
+    margin-left:auto;
+}
+/*--------------------------------------------------*/
+
+#absen table {
+    border-collapse: collapse;
+    text-align: center;
+    /*width: 500px;*/
+}
+#absen thead {
+    border: 1px solid black;
+    text-align: center;
+}
+#absen th.no {
+    width: 50px;
+    border: 1px solid black;
+    text-align: center;
+}
+#absen th.nim {
+    width: 100px;
+    border: 1px solid black;
+    text-align: center;
+}
+#absen th.nama {
+    width: 200px;
+    border: 1px solid black;
+    text-align: center;
+}
+#absen th.paraf {
+    width: 1000px;
+    text-align: center;
+}
+#absen tbody {
+    border: 1px solid black;
+    text-align: center;
+}
+#absen tfoot {
+    border: 1px solid black;
+    text-align: center;
+}
+#absen td {
+    
+    border: 1px solid black;
+    text-align: center;
+}
+#absen tr {
+    width: 100%;
+    border: 1px solid black;
+    text-align: center;
+}
+#absen td {
+    border: 1px solid black;
+    text-align: center;
+}

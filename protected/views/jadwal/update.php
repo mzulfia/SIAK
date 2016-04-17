@@ -1,21 +1,18 @@
 <?php
-/* @var $this JadwalController */
-/* @var $model Jadwal */
-
-$this->breadcrumbs=array(
-	'Jadwals'=>array('index'),
-	$model->id_jadwal=>array('view','id'=>$model->id_jadwal),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List Jadwal', 'url'=>array('index')),
-	array('label'=>'Create Jadwal', 'url'=>array('create')),
-	array('label'=>'View Jadwal', 'url'=>array('view', 'id'=>$model->id_jadwal)),
-	array('label'=>'Manage Jadwal', 'url'=>array('admin')),
+Yii::app()->clientScript->registerScript(
+   'myHideEffect',
+   '$(".alert-danger").animate({opacity: 1.0}, 3000).fadeOut("slow");',
+   CClientScript::POS_READY
 );
 ?>
 
-<h1>Update Jadwal <?php echo $model->id_jadwal; ?></h1>
+<h2><strong>Ubah Jadwal</strong></h2>
+
+<?php if(Yii::app()->user->hasFlash('error')):?>
+    <div class="alert-danger">
+        <?php echo "<h4 style= 'color: red'>" . Yii::app()->user->getFlash('error') . "</h4>"; ?>
+    </div>
+<?php endif; ?>
+
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

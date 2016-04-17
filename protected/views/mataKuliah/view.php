@@ -3,20 +3,13 @@
 /* @var $model MataKuliah */
 
 $this->breadcrumbs=array(
-	'Mata Kuliahs'=>array('index'),
+	'Mata Kuliah'=>array('index'),
 	$model->id_mk,
 );
 
-$this->menu=array(
-	array('label'=>'List MataKuliah', 'url'=>array('index')),
-	array('label'=>'Create MataKuliah', 'url'=>array('create')),
-	array('label'=>'Update MataKuliah', 'url'=>array('update', 'id'=>$model->id_mk)),
-	array('label'=>'Delete MataKuliah', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id_mk),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage MataKuliah', 'url'=>array('admin')),
-);
 ?>
 
-<h1>View MataKuliah #<?php echo $model->id_mk; ?></h1>
+<h2><strong>Lihat Mata Kuliah</strong></h2>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -26,7 +19,9 @@ $this->menu=array(
 		'nama_mk',
 		'sks',
 		'semester',
-		'kapasitas',
-		'id_dosen',
 	),
 )); ?>
+<?php $url = Yii::app()->request->baseUrl; ?>
+<div class='operasi'>
+	<a href='<?php echo $url ?>/MataKuliah/update/<?php echo $model->id_mk ;?>' class="btn btn-warning">Edit</a>
+</div>

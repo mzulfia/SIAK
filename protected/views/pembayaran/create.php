@@ -2,17 +2,12 @@
 /* @var $this PembayaranController */
 /* @var $model Pembayaran */
 
-$this->breadcrumbs=array(
-	'Pembayarans'=>array('index'),
-	'Create',
-);
-
 $this->menu=array(
 	array('label'=>'List Pembayaran', 'url'=>array('index')),
 	array('label'=>'Manage Pembayaran', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Create Pembayaran</h1>
+<h2><strong>Buat Pembayaran</strong></h2>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

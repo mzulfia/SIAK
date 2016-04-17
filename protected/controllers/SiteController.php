@@ -29,7 +29,8 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$this->redirect('site/login');
+
 	}
 
 	/**
@@ -77,6 +78,7 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
+		$this->layout = 'home';
 		$model=new LoginForm;
 
 		// if it is ajax validation request
@@ -91,8 +93,38 @@ class SiteController extends Controller
 		{
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
-				$this->redirect(Yii::app()->user->returnUrl);
+			if($model->validate() && $model->login()){
+				switch(Yii::app()->user->getState('role')){
+					case 1:
+						$model1 = Admin::model()->findAllByAttributes(array('id_user' => Yii::app()->user->getId()));
+						foreach($model1 as $model){
+							$model1 = $model->id_admin;
+						}
+						$this->redirect(Yii::app()->createUrl('/Admin/'));
+						break;
+					case 2:
+						$model2 = Sekretariat::model()->findAllByAttributes(array('id_user' => Yii::app()->user->getId()));
+						foreach($model2 as $model){
+							$model2 = $model->id_sekretariat;
+						}
+						$this->redirect(Yii::app()->createUrl('/Sekretariat/'));
+						break;	
+					case 3:
+						$model3 = Dosen::model()->findAllByAttributes(array('id_user' => Yii::app()->user->getId()));
+						foreach($model3 as $model){
+							$model3 = $model->id_dosen;
+						}
+						$this->redirect(Yii::app()->createUrl('/Dosen'));
+						break;	
+					case 4:
+						$model4 = Mahasiswa::model()->findAllByAttributes(array('id_user' => Yii::app()->user->getId()));
+						foreach($model4 as $model){
+							$model4 = $model->id_mhs;
+						}
+						$this->redirect(Yii::app()->createUrl('/Mahasiswa'));
+						break;	
+				}
+			}
 		}
 		// display the login form
 		$this->render('login',array('model'=>$model));
@@ -105,5 +137,10 @@ class SiteController extends Controller
 	{
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
+	}
+
+	public function actionFAQ()
+	{
+		$this->render('faq');
 	}
 }

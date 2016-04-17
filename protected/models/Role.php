@@ -28,7 +28,7 @@ class Role extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('nama', 'required'),
+			array('nama', 'required', 'message' => '{attribute} tidak boleh kosong'),
 			array('nama', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -54,7 +54,7 @@ class Role extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_role' => 'Id Role',
+			'id_role' => 'ID Role',
 			'nama' => 'Nama',
 		);
 	}

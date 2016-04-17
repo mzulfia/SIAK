@@ -1,21 +1,18 @@
 <?php
-/* @var $this MataKuliahController */
-/* @var $model MataKuliah */
-
-$this->breadcrumbs=array(
-	'Mata Kuliahs'=>array('index'),
-	$model->id_mk=>array('view','id'=>$model->id_mk),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List MataKuliah', 'url'=>array('index')),
-	array('label'=>'Create MataKuliah', 'url'=>array('create')),
-	array('label'=>'View MataKuliah', 'url'=>array('view', 'id'=>$model->id_mk)),
-	array('label'=>'Manage MataKuliah', 'url'=>array('admin')),
+Yii::app()->clientScript->registerScript(
+   'myHideEffect',
+   '$(".alert-danger").animate({opacity: 1.0}, 3000).fadeOut("slow");',
+   CClientScript::POS_READY
 );
 ?>
 
-<h1>Update MataKuliah <?php echo $model->id_mk; ?></h1>
+
+<h2><strong>Ubah Mata Kuliah</strong></h2>
+
+<?php if(Yii::app()->user->hasFlash('error')):?>
+    <div class="alert-danger">
+        <?php echo "<h4 style= 'color: red'>" . Yii::app()->user->getFlash('error') . "</h4>"; ?>
+    </div>
+<?php endif; ?>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

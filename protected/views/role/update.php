@@ -16,6 +16,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Update Role <?php echo $model->id_role; ?></h1>
+<h2><strong>Perbaharui Role</strong></h2>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

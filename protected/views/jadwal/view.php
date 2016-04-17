@@ -2,30 +2,46 @@
 /* @var $this JadwalController */
 /* @var $model Jadwal */
 
-$this->breadcrumbs=array(
-	'Jadwals'=>array('index'),
-	$model->id_jadwal,
-);
-
-$this->menu=array(
-	array('label'=>'List Jadwal', 'url'=>array('index')),
-	array('label'=>'Create Jadwal', 'url'=>array('create')),
-	array('label'=>'Update Jadwal', 'url'=>array('update', 'id'=>$model->id_jadwal)),
-	array('label'=>'Delete Jadwal', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id_jadwal),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage Jadwal', 'url'=>array('admin')),
-);
 ?>
 
-<h1>View Jadwal #<?php echo $model->id_jadwal; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
+<h2><strong>Lihat Jadwal</strong></h2>
+
+<?php
+ $mk = $model->idMk->nama_mk;
+ $ruang = (empty($model->id_ruang_1) ? "" : $model->idRuang1->no_ruang) . (empty($model->id_ruang_2) ? "" : "<br>" . $model->idRuang2->no_ruang) . (empty($model->id_ruang_3) ? "" : "<br>" . $model->idRuang3->no_ruang) . (empty($model->id_ruang_4) ? "" : "<br>" . $model->idRuang4->no_ruang);
+
+ $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'id_jadwal',
-		'waktu',
-		'periode_awal',
-		'periode_akhir',
-		'id_mk',
-		'id_ruang',
+		'tahun_ajaran',
+		'semester',
+		'hari_1',
+		'waktu_awal_1',
+		'waktu_akhir_1',
+		'hari_2',
+		'waktu_awal_2',
+		'waktu_akhir_2',
+		'hari_3',
+		'waktu_awal_3',
+		'waktu_akhir_3',
+		'hari_4',
+		'waktu_awal_4',
+		'waktu_akhir_4',
+		array(
+			'label' => 'Mata Kuliah',
+			'value' => $mk,
+		),
+		'kelas',
+		'kapasitas',
+		array(
+			'label' => 'Ruangan',
+			'value' => str_replace("<br>", ", " , $ruang),
+		),
 	),
 )); ?>
+
+<?php $url = Yii::app()->request->baseUrl; ?>
+<div class='operasi'>
+	<a href='<?php echo $url ?>/Jadwal/update/<?php echo $model->id_jadwal ;?>' class="btn btn-warning">Edit</a>
+</div>

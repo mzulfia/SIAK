@@ -2,20 +2,22 @@
 /* @var $this UserController */
 /* @var $model User */
 
-$this->breadcrumbs=array(
-	'Users'=>array('index'),
-	$model->id_user=>array('view','id'=>$model->id_user),
-	'Update',
+
+Yii::app()->clientScript->registerScript(
+   'myHideEffect',
+   '$(".alert-danger").animate({opacity: 1.0}, 3000).fadeOut("slow");',
+   CClientScript::POS_READY
 );
 
-$this->menu=array(
-	array('label'=>'List User', 'url'=>array('index')),
-	array('label'=>'Create User', 'url'=>array('create')),
-	array('label'=>'View User', 'url'=>array('view', 'id'=>$model->id_user)),
-	array('label'=>'Manage User', 'url'=>array('admin')),
-);
+
 ?>
 
-<h1>Update User <?php echo $model->id_user; ?></h1>
+<h2><strong>Ubah User</strong></h2>
+
+<?php if(Yii::app()->user->hasFlash('error')):?>
+	    <div class="alert-danger">
+	        <?php echo "<h4 style= 'color: red'>" . Yii::app()->user->getFlash('error') . "</h4>"; ?>
+	    </div>
+	<?php endif; ?>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

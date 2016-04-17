@@ -28,19 +28,19 @@ class UserController extends Controller
 	{
 		if( Yii::app()->user->getState('role') == "1")
         {
-             $arr =array('admin','create','update','delete','view', 'index');
+             $arr =array('admin','create','update','delete','view', 'index', 'changePassword');
         }
         else if( Yii::app()->user->getState('role') == "2")
         {
-            $arr =array('admin','create','update','delete','view', 'index'); 
+            $arr =array('admin','create','update','delete','view', 'index', 'changePassword'); 
         }
         else if( Yii::app()->user->getState('role') == "3")
         {
-          	$arr = array('');      
+          	$arr = array('changePassword');      
         }
         else
         {
-        	$arr = array('');
+        	$arr = array('changePassword');
         }        
         return array(                   
                 array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -75,46 +75,96 @@ class UserController extends Controller
 		$model1 = new Admin;
 		$model2 = new Sekretariat;
 		$model3 = new Dosen;
-
+		$model4 = new Mahasiswa;
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			
-			$dua = $model->password;
-			$model->saltPassword = $model->generateSalt();
-			$model->password = $model->hashPassword($dua, $model->saltPassword);
-			if($model->save())
-				if($model->id_role == '1')
+			$model->password_temp = $model->password;
+			$model->validate();
+			if(!empty($model->password) && $model->validate())
+			{
+				$model->saltPassword = $model->generateSalt();
+				$model->password = $model->hashPassword($model->password, $model->saltPassword);
+				if($model->save())
 				{
-					$model1->id_user = $model->id_user;
-					$model1->save();
-				}
-				else if($model->id_role == '2')
-				{
-					$model2->id_user = $model->id_user;
-					$model2->save();
-				}
-				else if($model->id_role == '3')
-				{
-					$model3->id_user = $model->id_user;
-					$model3->save();
-				}
+					if($model->id_role == '1')
+					{
+						$model1->id_user = $model->id_user;
+						if($model1->save())
+						{
+							Yii::app()->user->setFlash('success', "Berhasil dibuat!");	
+							$this->redirect(array('admin'));
+						}
+						else
+						{
+							Yii::app()->user->setFlash('error', "Gagal dibuat!");
+						}
+							
+					}
+					else if($model->id_role == '2')
+					{
+						$model2->id_user = $model->id_user;
+						if($model2->save())
+						{
+							Yii::app()->user->setFlash('success', "Berhasil dibuat!");	
+							$this->redirect(array('admin'));
+						}
+						else
+						{
+							Yii::app()->user->setFlash('error', "Gagal dibuat!");
+						}
+					}
+					else if($model->id_role == '3')
+					{
+						$model3->id_user = $model->id_user;
+						if($model3->save())
+						{
+							Yii::app()->user->setFlash('success', "Berhasil dibuat!");	
+							$this->redirect(array('admin'));
+						}
+						else
+						{
+							Yii::app()->user->setFlash('error', "Gagal dibuat!");
+						}
+					}
+					else
+					{
+						$model4->id_user = $model->id_user; 
+						if($model4->save())
+						{
+							Yii::app()->user->setFlash('success', "Berhasil dibuat!");	
+							$this->redirect(array('admin'));
+						}
+						else
+						{
+							Yii::app()->user->setFlash('error', "Gagal dibuat!");
+						}
+					}
+				}	
 				else
 				{
-					$model->id_user = $model->id_user; 
-					$model4->save();
+					Yii::app()->user->setFlash('error', "Gagal dibuat!");
+					$model->password = '';
+					$model->confirmation_password = '';
 				}
-				$this->redirect(array('view','id'=>$model->id_user));
-		}
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+				$model->password = '';
+				$model->confirmation_password = '';
+			}
 
+		}
 		$this->render('create',array(
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -123,6 +173,10 @@ class UserController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+		$model->password = '';
+		$model->password_temp = '';
+		$model->confirmation_password = '';
+		$model->saltPassword = '';
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -130,14 +184,97 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_user));
+			$model->password_temp = $model->password;
+			$model->validate();
+			if(!empty($model->password) && $model->validate())
+			{
+				$model->saltPassword = $model->generateSalt();
+				$model->password = $model->hashPassword($model->password, $model->saltPassword);
+				if($model->save())
+				{	
+					Yii::app()->user->setFlash('success', "Berhasil disimpan!");	
+					$this->redirect(array('admin'));
+				}
+				else
+				{
+					Yii::app()->user->setFlash('error', "Gagal disimpan!");
+					$model->password = '';
+					$model->confirmation_password = '';
+				}
+			}	
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+				$model->password = '';
+				$model->confirmation_password = '';
+			}
+
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
 		));
 	}
+
+	public function actionChangePassword()
+	{
+		$id = Yii::app()->user->getId();
+		$model=$this->loadModel($id);
+		$username = strtolower($model->username); 
+        	$user = User::model()->find('LOWER(username)=?', array($username)); 
+
+		$model->password = '';
+		$model->password_temp = '';
+		$model->confirmation_password = '';
+		$model->saltPassword = '';
+
+		if(isset($_POST['User']))
+		{
+			$model->attributes=$_POST['User'];
+			$model->password_temp = $model->password;
+			$model->validate();
+			if(!empty($model->password) && $model->validate())
+			{
+				if($user->validatePassword($model->password))
+				{
+					Yii::app()->user->setFlash('error', "Password Baru tidak boleh sama dengan Password Lama!");	
+					$model->password = '';
+					$model->confirmation_password = '';					
+				} 
+				else
+				{
+					$model->saltPassword = $model->generateSalt();
+					$model->password = $model->hashPassword($model->password, $model->saltPassword);
+					if($model->save())
+					{	
+						Yii::app()->user->setFlash('success', "Berhasil disimpan!");
+						$model->password = '';
+						$model->confirmation_password = '';
+					}
+					else
+					{
+						Yii::app()->user->setFlash('error', "Gagal disimpan!");
+						$model->password = '';
+						$model->confirmation_password = '';
+					}
+				}
+				
+			}	
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+				$model->password = '';
+				$model->confirmation_password = '';
+			}
+
+		}
+
+		$this->render('changePassword',array(
+			'model'=>$model,
+		));
+	}
+
+
 
 	/**
 	 * Deletes a particular model.

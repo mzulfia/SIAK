@@ -9,7 +9,6 @@
  * @property string $nama_mk
  * @property integer $sks
  * @property integer $semester
- * @property integer $kapasitas
  * @property integer $nip_dosen
  *
  * The followings are the available model relations:
@@ -38,12 +37,12 @@ class MataKuliah extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('kode_mk, nama_mk, sks, semester, kapasitas', 'required'),
-			array('sks, semester, kapasitas, nip_dosen', 'numerical', 'integerOnly'=>true),
+			array('kode_mk, nama_mk, sks, semester', 'required', 'message' => '{attribute} tidak boleh kosong'),
+			array('sks, semester', 'numerical', 'integerOnly'=>true, 'min' => 1),
 			array('nama_mk', 'length', 'max'=>25),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_mk, kode_mk, nama_mk, sks, semester, kapasitas, nip_dosen', 'safe', 'on'=>'search'),
+			array('id_mk, kode_mk, nama_mk, sks, semester', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +57,6 @@ class MataKuliah extends CActiveRecord
 			'jadwals' => array(self::HAS_MANY, 'Jadwal', 'id_mk'),
 			'khs' => array(self::HAS_MANY, 'Khs', 'id_mk'),
 			'krs' => array(self::HAS_MANY, 'Krs', 'id_mk'),
-			'nipDosen' => array(self::BELONGS_TO, 'Dosen', 'nip_dosen'),
 			'nilais' => array(self::HAS_MANY, 'Nilai', 'id_mk'),
 			'perkuliahans' => array(self::HAS_MANY, 'Perkuliahan', 'id_mk'),
 		);
@@ -70,13 +68,11 @@ class MataKuliah extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id_mk' => 'Id Mk',
-			'kode_mk' => 'Kode Mk',
-			'nama_mk' => 'Nama Mk',
-			'sks' => 'Sks',
+			'id_mk' => 'ID MK',
+			'kode_mk' => 'Kode MK',
+			'nama_mk' => 'Nama MK',
+			'sks' => 'SKS',
 			'semester' => 'Semester',
-			'kapasitas' => 'Kapasitas',
-			'nip_dosen' => 'Nip Dosen',
 		);
 	}
 
@@ -99,15 +95,18 @@ class MataKuliah extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id_mk',$this->id_mk);
-		$criteria->compare('kode_mk',$this->kode_mk);
+		$criteria->compare('kode_mk',$this->kode_mk,true);
 		$criteria->compare('nama_mk',$this->nama_mk,true);
-		$criteria->compare('sks',$this->sks);
-		$criteria->compare('semester',$this->semester);
-		$criteria->compare('kapasitas',$this->kapasitas);
-		$criteria->compare('nip_dosen',$this->nip_dosen);
-
+		$criteria->compare('sks',$this->sks,true);
+		$criteria->compare('semester',$this->semester,true);
+		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort'=>array(
+				'defaultOrder'=>'semester ASC',
+			),
+
+
 		));
 	}
 
@@ -120,5 +119,31 @@ class MataKuliah extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public function getMKOption()
+	{
+		$mkArray = CHtml::listData(MataKuliah::model()->findAll(), 'id_mk','nama_mk');
+		return $mkArray;
+	}
+
+	public function getNama($id){
+		$res = MataKuliah::model()->findByAttributes(array('id_mk' => $id));
+		return (empty($res['nama_mk'])) ? "" : $res['nama_mk']; 
+	}
+
+	public function getMK($id)
+	{
+		$ret = '';
+		
+		$sql = 'SELECT a.nama_mk AS nama FROM mata_kuliah a, pengajar_mk b WHERE a.id_mk = b.id_mk AND b.id_dosen = :id';
+		$result = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $id));
+
+		for($i = 0; $i < sizeof($result); $i++)
+		{
+			$ret .= $result[$i]['nama'];
+			$ret .= '<br>';
+		}
+		return $ret;
 	}
 }

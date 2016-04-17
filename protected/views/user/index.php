@@ -11,10 +11,16 @@ $this->menu=array(
 	array('label'=>'Manage User', 'url'=>array('admin')),
 );
 ?>
+<div class="container-fluid">
+	<h2><strong>User</strong></h2>
+    <div class="container"><HR></div>
+    <br>
 
-<h1>Users</h1>
 
-<?php $this->widget('zii.widgets.CListView', array(
+<?php 
+$this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
-)); ?>
+)); 
+?>
+</div>

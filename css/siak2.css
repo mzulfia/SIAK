@@ -1,0 +1,281 @@
+/*Admin - View*/
+
+.summary, .items
+{
+	margin: 0px 0  20px 50px;
+}
+.left
+{
+	text-align: left;
+}
+.buat
+{
+	margin-left: 10%;
+	margin-bottom: 20px;
+}
+.green{
+	background-color: #00923F;
+	color: white;
+	border: none;
+}
+.username b, .role b
+{
+	width: 100px;
+	line-height: 30px;
+}
+/*GRID VIEW*/
+
+h2.title
+{
+	margin-top: 50px;
+}
+
+table.table
+{
+	width: 80%;
+	margin-left: 100px;
+}
+table.table th
+{
+	text-align: center;
+}
+table.table.detail {
+	width: 450px;
+	margin-top: 40px;
+}
+table.table.detail th
+{
+	text-align: left;
+	padding-left: 30px;
+	width: 200px;
+}
+table.table.detail td::before
+{
+	content: ':';
+	font-weight: bolder;
+	padding-right: 30px;
+}
+.operasi
+{
+	width: 450px;
+	margin-left: 100px;
+	text-align: right;
+	margin-bottom: 50px;
+}
+
+.form 
+{
+	margin-left: 100px;
+}
+label
+{
+	line-height: 40px;
+	width: 220px;
+}
+.colon{
+	font-weight: bolder;
+	padding-right: 10px;
+}
+.form .row, .note
+{
+	margin: 0;
+	border-bottom: 1px solid #dcdcdc;
+	width: 750px;
+}
+
+.note{
+	padding-bottom: 30px;
+}
+.input
+{
+	width: 200px;
+	display: inline;
+	height: 35px;
+}
+
+.row.submit
+{
+	line-height: 40px;
+	border: none;
+	text-align: right;
+	margin-top: 20px;
+	margin-bottom: 80px;
+}
+.error.required
+{
+	color: red;
+}
+.input.error
+{
+	border-color: red;
+	background-color: #fee;
+}
+.errorSummary
+{
+	margin-top: 10px;
+	border: 1px solid red;
+	background-color: #fee;
+	width: 550px;
+}
+.errorMessage
+{
+	float: right;
+	font-size: 10px;
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: red;
+}
+
+/*=========SEKRETARIAT=========*/
+
+/*Kalender*/
+.tab-kalender
+{
+	margin-top: 50px;
+}
+#kalender-grid table.table
+{
+	width: 95%;
+	margin-left: 50px;
+	font-size: 12px;
+}
+#kalender-grid table.table th, #kalender-grid table.table td{
+	width: 100px;
+}
+.btn{
+	margin-bottom: 75px;
+}
+.buat .btn, .submit .btn{
+	margin-bottom: 0;
+}
+.update-nilai{
+	margin-left: 100px;
+}
+
+.informasi{
+	border: 1px solid #00923F;
+	padding-bottom: 20px;
+	border-radius: 30px;
+	padding-left: 0;
+	padding-right: 0;
+	margin: 0 auto;
+	width: 500px;
+}
+.informasi h4{
+	padding: 20px 0;
+	background-color: #00923F;
+	color: #FFF500;
+	margin: 0;
+	border-top-right-radius: 25px;
+	border-top-left-radius: 25px;
+}
+.informasi p{
+	padding-top: 20px;
+}
+
+table.ringkasan{
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	margin-left: 0;
+	width: 400px;
+}
+table.ringkasan td, table.ringkasan th{
+	text-align: left;
+}
+.khs h3{
+	text-align: left;
+}
+.rangkuman{
+	float: left;
+	width: 120px;
+}
+.rangkuman table{
+	border: 1px solid #ddd;
+	margin-left: 0;
+	width: 120px;
+}
+.rangkuman th{
+	background-color: #eee;
+}
+.grafik{
+	float: left;
+	margin-left: 75px;
+	width: 900px;
+}
+
+table.viewkrs{
+	width: 100%;
+	margin-left: 0;
+	margin-top: 25px;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+.informasikrs{
+	border: 1px solid #00923F;
+	background-color: #DFF0D8;
+	padding: 20px;
+	width: 600px;
+	margin: 0 auto;
+	color: #008000;
+}
+
+.idm{
+	float: left;
+}
+table.field th{
+	width: 120px;
+}
+table.field input, table.field select, table.field textarea{
+	width: 250px;
+	float: left;
+}
+table.field tr{
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	height: 45px;
+}
+.profil hr{
+	height: 2px;
+	background-color: #00923F;
+	width: 300px;
+}
+.profil h4{
+	margin-top: 70px;
+}
+.down{
+	margin-top: 40px;
+}
+
+/*=========Advanced Search=========*/
+.search-form{
+	width: 100%;
+	float:none; 
+	margin: 0 auto;
+}
+.search-label{
+	width: auto;
+	margin-right: 20px;
+}
+.search-input{
+	width: 200px;
+	margin-right: 20px;
+}
+.search-btn{
+	margin-left: 20px;
+	display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+}

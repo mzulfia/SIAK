@@ -26,23 +26,32 @@ class JadwalController extends Controller
 	 */
 	public function accessRules()
 	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+		if( Yii::app()->user->getState('role') == "1")
+        {
+             $arr =array('admin','create','update','delete','view', 'index');
+        }
+        else if( Yii::app()->user->getState('role') == "2")
+        {
+            $arr =array('admin', 'create', 'update', 'delete','view', 'index'); 
+        }
+        else if( Yii::app()->user->getState('role') == "3")
+        {
+          	$arr = array('viewJadwalD');      
+        }
+        else
+        {
+        	$arr = array('viewJadwalM', 'ajaxSave', 'dropMK', 'update','view', 'index');
+        }        
+        return array(                   
+                array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                                'actions'=>$arr,
+                                'users'=>array('@'),
+                        ),
+                                                
+                        array('deny',  // deny all users
+                                'users'=>array('*'),
+                        ),
+                );
 	}
 
 	/**
@@ -64,14 +73,25 @@ class JadwalController extends Controller
 	{
 		$model=new Jadwal;
 
+		$model->tahun_ajaran = Kalender::model()->getLastYear();
+		$model->semester = Kalender::model()->getLastTerm();
+		
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Jadwal']))
 		{
 			$model->attributes=$_POST['Jadwal'];
+					
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_jadwal));
+			{
+				Yii::app()->user->setFlash('success', "Berhasil disimpan!");	
+				$this->redirect(array('admin'));
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+			}	
 		}
 
 		$this->render('create',array(
@@ -95,7 +115,14 @@ class JadwalController extends Controller
 		{
 			$model->attributes=$_POST['Jadwal'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_jadwal));
+			{
+				Yii::app()->user->setFlash('success', "Berhasil disimpan!");	
+				$this->redirect(array('admin'));
+			}
+			else
+			{
+				Yii::app()->user->setFlash('error', "Gagal disimpan!");
+			}	
 		}
 
 		$this->render('update',array(
@@ -170,4 +197,99 @@ class JadwalController extends Controller
 			Yii::app()->end();
 		}
 	}
+
+	public function actionViewJadwalM()
+	{
+		$id = Mahasiswa::model()->getId(Yii::app()->user->getId());
+		$sms = Mahasiswa::model()->getSms($id);
+
+		$model=new PengajarKuliah('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['PengajarKuliah']))
+			$model->attributes=$_GET['PengajarKuliah'];
+
+		$this->render('viewJadwalM',array(
+			'model'=>$model, 'id' => $id, 'sms' => $sms
+		));
+	}
+
+	public function actionViewJadwalD()
+	{
+		$id = Dosen::model()->getId(Yii::app()->user->getId());
+
+		$model=new PengajarKuliah('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['PengajarKuliah']))
+			$model->attributes=$_GET['PengajarKuliah'];
+
+		$this->render('viewJadwalD',array(
+			'model'=>$model, 'id' => $id
+		));	
+	}
+
+	public function actionDropMK($id_jadwal)
+	{
+		$id_mhs = Mahasiswa::getId(Yii::app()->user->getId());
+		$mhs = Mahasiswa::model()->findByPk($id_mhs);
+		$jadwal = $this->loadModel($id_jadwal);
+		$year = Kalender::model()->getLastYear();
+		$term = Kalender::model()->getLastTerm();
+
+		$krs = Krs::model()->findByAttributes(array('tahun_ajaran' => $year, 'term' => $term, 'semester' => $mhs->semester, 'id_jadwal' => $id_jadwal, 'id_mhs' => $id_mhs));
+		$khs = Khs::model()->findByAttributes(array('tahun_ajaran' => $year, 'term' => $term, 'semester' => $mhs->semester, 'id_jadwal' => $id_jadwal, 'id_mhs' => $id_mhs));
+		$peserta = PesertaMK::model()->findByAttributes(array('tahun_ajaran' => $year, 'semester' => $term, 'id_mhs' => $id_mhs, 'id_jadwal' => $id_jadwal));
+		
+		if(!empty($krs))
+		{	
+			$krs->delete();
+			$khs->delete();	
+			$peserta->delete();
+		}
+
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('createKrs'));
+	}
+
+	public function actionAjaxSave()
+	{
+		$autoIdAll = $_POST['autoId'];
+		$id_mhs = Mahasiswa::getId(Yii::app()->user->getId());
+		$year = Kalender::model()->getLastYear();
+		$term = Kalender::model()->getLastTerm();
+		
+		foreach($autoIdAll as $autoId)
+		{
+			$jadwal = $this->loadModel($autoId);
+			$mhs = Mahasiswa::model()->findByPK($id_mhs);
+			$krs = new Krs;
+			$khs = new Khs;
+			$peserta = new PesertaMK;
+			
+			if(Jadwal::getKrsRecord($jadwal->id_jadwal))
+			{
+				$krs->id_mhs = (int) $id_mhs;
+			 	$krs->semester = (int) $mhs->semester;
+			 	$krs->id_jadwal = (int) $jadwal->id_jadwal;
+			 	$krs->tahun_ajaran = $year;
+			 	$krs->term = $term;
+			 	$khs->id_mhs = (int) $id_mhs;
+			 	$khs->semester = (int) $mhs->semester;
+			 	$khs->id_jadwal = (int) $jadwal->id_jadwal;
+			 	$khs->nilai_akhir = '-';
+			 	$khs->tahun_ajaran = $year;
+			 	$khs->term = $term;
+			 	if(PesertaMK::model()->getJumlahMhs($jadwal->id_jadwal) < $jadwal->kapasitas)
+				{
+					$peserta->id_mhs = (int) $id_mhs;
+				 	$peserta->id_jadwal = (int) $jadwal->id_jadwal;
+					$peserta->tahun_ajaran = Kalender::model()->getLastYear();
+					$peserta->semester = Kalender::model()->getLastTerm();
+					$peserta->save();
+					$krs->save();
+			 		$khs->save();
+				}	
+			}
+ 		}	
+	}
 }
+	

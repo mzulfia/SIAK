@@ -4,7 +4,7 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
+<div class="form left">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'ruang-form',
@@ -15,20 +15,21 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<?php echo $form->errorSummary($model); ?>
-
+	<p class="note">Kolom dengan <span class="required">*</span> harus diisi.</p>
+		
 	<div class="row">
 		<?php echo $form->labelEx($model,'no_ruang'); ?>
-		<?php echo $form->textField($model,'no_ruang'); ?>
+		<span class='colon'>:</span>
+		<?php echo $form->textField($model,'no_ruang', array('size'=>20,'maxlength'=>20, 'class'=>'form-control input')); ?>
 		<?php echo $form->error($model,'no_ruang'); ?>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+	<div class="row submit">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>'btn btn-primary')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<?php echo "<div class='form left'><br>" . CHtml::link('Back', array('/Ruang/admin'), array('class' => 'btn btn-default')) . "</div>"; ?>

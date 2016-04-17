@@ -4,7 +4,7 @@
 /* @var $form CActiveForm */
 ?>
 
-<div class="form">
+<div class="form left">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'mata-kuliah-form',
@@ -15,50 +15,44 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
-	<?php echo $form->errorSummary($model); ?>
+	<p class="note">Kolom dengan <span class="required">*</span> harus diisi.</p>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'kode_mk'); ?>
-		<?php echo $form->textField($model,'kode_mk'); ?>
+		<span class='colon'>:</span>
+		<?php echo $form->textField($model,'kode_mk', array('class'=>'form-control input')); ?>
 		<?php echo $form->error($model,'kode_mk'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'nama_mk'); ?>
-		<?php echo $form->textField($model,'nama_mk',array('size'=>25,'maxlength'=>25)); ?>
+		<span class='colon'>:</span>
+		<?php echo $form->textField($model,'nama_mk',array('size'=>25,'maxlength'=>25, 'class'=>'form-control input')); ?>
 		<?php echo $form->error($model,'nama_mk'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'sks'); ?>
-		<?php echo $form->textField($model,'sks'); ?>
+		<span class='colon'>:</span>
+		<?php echo $form->textField($model,'sks', array('class'=>'form-control input')); ?>
 		<?php echo $form->error($model,'sks'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'semester'); ?>
-		<?php echo $form->textField($model,'semester'); ?>
+		<span class='colon'>:</span>
+		<?php echo $form->textField($model,'semester', array('class'=>'form-control input')); ?>
 		<?php echo $form->error($model,'semester'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'kapasitas'); ?>
-		<?php echo $form->textField($model,'kapasitas'); ?>
-		<?php echo $form->error($model,'kapasitas'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'nip_dosen'); ?>
-		<?php echo $form->textField($model,'nip_dosen'); ?>
-		<?php echo $form->error($model,'nip_dosen'); ?>
-	</div>
-
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+	<div class="row submit">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('class'=>'btn btn-primary')); ?>
 	</div>
 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<?php 
+	echo "<div class='form left'><br>" . CHtml::link('Back', array('/MataKuliah/admin'), array('class' => 'btn btn-default')) . "</div>";  
+?>

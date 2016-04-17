@@ -1,0 +1,53 @@
+<?php
+/* @var $this JadwalController */
+/* @var $model Jadwal */
+/* @var $form CActiveForm */
+?>
+
+<div class="form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'createPerkuliahan-form',
+	'enableAjaxValidation'=>false,
+)); ?>
+
+<?php 
+	$this->widget('zii.widgets.grid.CGridView', array(
+	'id'=>'jadwal-grid',
+	'dataProvider'=>$model->search(),
+	'filter'=>$model,
+	'columns'=>array(
+		'id_jadwal',
+		'tahun_ajaran',
+		'semester',
+		'waktu_awal_1',
+		'waktu_akhir_1',
+		'hari_1',
+		'waktu_awal_2',
+		'waktu_akhir_2',
+		'hari_2',
+		'waktu_awal_3',
+		'waktu_akhir_3',
+		'hari_3',
+		'waktu_awal_4',
+		'waktu_akhir_4',
+		'hari_4',
+		'kelas',
+		'kapasitas',
+		array(
+			'name' => 'id_mk',
+			'value' => '$data->idMk->nama_mk',
+		),
+		array(
+			'name' => 'id_ruang',
+			'value' => '$data->idRuang->no_ruang',
+		),
+		array(
+			'class'=>'CButtonColumn',
+		),
+	),
+)); ?>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->

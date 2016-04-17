@@ -8,6 +8,7 @@ class PembayaranController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
+	
 	/**
 	 * @return array action filters
 	 */
@@ -28,11 +29,11 @@ class PembayaranController extends Controller
 	{
 		if( Yii::app()->user->getState('role') == "1")
         {
-             $arr =array('admin','create','update','delete','view', 'index');
+             $arr =array('admin','create','update','delete','view', 'viewPembayaranMahasiswa', 'index', 'ajaxupdate');
         }
         else if( Yii::app()->user->getState('role') == "2")
         {
-            $arr =array('update','view', 'index'); 
+            $arr =array('admin', 'create', 'update', 'delete','view', 'viewPembayaranMahasiswa', 'index', 'ajaxupdate'); 
         }
         else if( Yii::app()->user->getState('role') == "3")
         {
@@ -40,7 +41,7 @@ class PembayaranController extends Controller
         }
         else
         {
-        	$arr = array('');
+        	$arr = array('viewSPP');
         }        
         return array(                   
                 array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -79,8 +80,12 @@ class PembayaranController extends Controller
 		if(isset($_POST['Pembayaran']))
 		{
 			$model->attributes=$_POST['Pembayaran'];
+			if($model->pembayaran >= '5500000' && $model->pembayaran < $model->tagihan)
+				$model->status = 'LUNAS BERSYARAT';
+			elseif ($model->pembayaran == $model->tagihan)
+				$model->status = 'LUNAS';
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_pembayaran));
+				$this->redirect(array('viewPembayaranMahasiswa','id'=>$model->id_mhs));
 		}
 
 		$this->render('create',array(
@@ -103,8 +108,14 @@ class PembayaranController extends Controller
 		if(isset($_POST['Pembayaran']))
 		{
 			$model->attributes=$_POST['Pembayaran'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_pembayaran));
+			if($model->pembayaran >= '5500000' && $model->pembayaran < $model->tagihan)
+				$model->status = 'LUNAS BERSYARAT';
+			elseif ($model->pembayaran != null && $model->tagihan != null && $model->pembayaran == $model->tagihan)
+				$model->status = 'LUNAS';
+			if($model->save()){
+				Yii::app()->user->setFlash('success','Berhasil disimpan!');
+				$this->redirect(array('viewPembayaranMahasiswa','id'=>$model->id_mhs));
+			}
 		}
 
 		$this->render('update',array(
@@ -119,11 +130,26 @@ class PembayaranController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		try
+		{
+		    $this->loadModel($id)->delete();
+		    if(!isset($_GET['ajax']))
+		    {
+		    	Yii::app()->user->setFlash('success','Normal - Deleted Successfully');
+		    	$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		    }
+		    else
+		    {
+		    	echo "<div class='flash-success'>Ajax - Deleted Successfully</div>";
+		    }
+		}
+		catch(CDbException $e)
+		{
+		    if(!isset($_GET['ajax']))
+		        Yii::app()->user->setFlash('error','Normal - error message');
+		    else
+		        echo "<div class='flash-error'>Ajax - error message</div>"; //for ajax}
+		}
 	}
 
 	/**
@@ -147,8 +173,14 @@ class PembayaranController extends Controller
 		if(isset($_GET['Pembayaran']))
 			$model->attributes=$_GET['Pembayaran'];
 
+		if (isset($_GET['export'])) {
+                $production = 'export';
+        } else {
+                $production = 'grid';
+        }
+		
 		$this->render('admin',array(
-			'model'=>$model,
+			'model'=>$model, 'production' => $production
 		));
 	}
 
@@ -177,6 +209,80 @@ class PembayaranController extends Controller
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
+		}
+	}
+
+	public function actionViewPembayaranMahasiswa($id)
+	{
+		$this->layout ='//layouts/column1';
+		$model=new Pembayaran('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Pembayaran']))
+			$model->attributes=$_GET['Pembayaran'];
+
+		$this->render('viewPembayaranMahasiswa',array(
+			'model'=>$model, 'id_mhs' => $id
+		));
+	}
+
+	public function actionViewSPP()
+	{
+		$model=new Pembayaran('search');
+		$model->unsetAttributes();  // clear any default values
+		
+		$this->render('viewSPP',array(
+			'model'=>$model,
+		));
+	}
+
+	public function actionAjaxupdate()
+	{
+		$act = $_GET['act'];
+		
+		if($act == 'setPembayaran')
+	    {	
+	    	$setAll = $_POST['pembayaran'];
+	    	if(count($setAll) > 0)
+	    	{
+	    	 	foreach($setAll as $id_pembayaran => $pembayaran)
+	    		{
+	    			$model = $this->loadModel($id_pembayaran);
+	    			$model->pembayaran = $pembayaran;
+	    			
+					if($model->pembayaran >= '5500000' && $model->pembayaran < $model->tagihan)
+	    			{
+	    				$mhs = Mahasiswa::model()->findByPk($model->id_mhs);
+	    				$model->status = 'LUNAS BERSYARAT';
+	    				$model->update();
+	    				$mhs->status_akademis = 'Aktif';
+	    				$mhs->update();
+	    			}	
+					if ($model->pembayaran != null && $model->tagihan != null && $model->pembayaran == $model->tagihan)
+					{
+						$mhs = Mahasiswa::model()->findByPk($model->id_mhs);
+	    				$model->status = 'LUNAS';
+	    				$model->update();
+	    				$mhs->status_akademis = 'Aktif';
+	    				$mhs->update();
+					}
+				}
+	    	}
+	    }
+	    else
+	    { 
+	    	$id_mhs = $_GET['id_mhs'];  
+			$model = Mahasiswa::model()->findByPk($id_mhs);
+			if($model->semester == 6)
+			{
+				$model->semester += 0;
+				$model->update();
+			}
+			else
+			{
+				$model->semester += 1;
+				$model->status_krs = 'Belum Disetujui';	
+				$model->update();
+			}
 		}
 	}
 }
